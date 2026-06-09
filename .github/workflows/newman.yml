@@ -27,11 +27,30 @@ jobs:
 
       - name: Start Prism mock servers
         run: |
-          nohup npm run mock:iot > prism-iot.log 2>&1 &
-          nohup npm run mock:vision > prism-vision.log 2>&1 &
+          npx prism mock contracts/iot-ingestion.openapi.yaml -p 4010 --host 0.0.0.0 &> prism-iot.log &
+          echo $! > prism-iot.pid
+          npx prism mock contracts/ai-vision.openapi.yaml -p 4011 --host 0.0.0.0 &> prism-vision.log &
+          echo $! > prism-vision.pid
+          sleep 5
+
+      - name: Debug mock server status
+        if: always()
+        run: |
+          echo "=== Prism IoT PID ==="
+          cat prism-iot.pid || echo "No PID file"
+          echo "=== Prism Vision PID ==="
+          cat prism-vision.pid || echo "No PID file"
+          echo "=== Running processes ==="
+          ps aux | grep prism || true
+          echo "=== Listening ports ==="
+          ss -tlnp | grep -E '4010|4011' || true
+          echo "=== Prism IoT log (last 30 lines) ==="
+          tail -30 prism-iot.log || true
+          echo "=== Prism Vision log (last 30 lines) ==="
+          tail -30 prism-vision.log || true
 
       - name: Wait for mock servers
-        run: npx wait-on http-get://localhost:4010/health http-get://localhost:4011/health --timeout 30000 --httpTimeout 5000
+        run: npx wait-on http-get://localhost:4010/health http-get://localhost:4011/health --timeout 60000 --httpTimeout 5000 --delay 2000 --interval 3000 --verbose
 
       - name: Run Newman contract tests
         run: npm run test:mock
