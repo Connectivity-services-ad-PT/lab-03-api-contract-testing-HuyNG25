@@ -95,12 +95,12 @@ paths:
             application/json:
               schema: 
                 $ref: '#/components/schemas/NotificationAccepted'
-              examples:
-                accepted:
-                  value:
-                    notificationId: "0196fb3d-4ad7-7d1e-9f49-5d5148d2cccc"
-                    status: "PENDING"
-                    acceptedAt: "2026-06-08T23:15:05Z"
+                examples:
+                  accepted:
+                    value:
+                      notificationId: "0196fb3d-4ad7-7d1e-9f49-5d5148d2cccc"
+                      status: "PENDING"
+                      acceptedAt: "2026-06-08T23:15:05Z"
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
