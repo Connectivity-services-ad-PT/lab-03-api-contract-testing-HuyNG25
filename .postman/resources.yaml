@@ -1,0 +1,14 @@
+# Use this workspace to collaborate
+workspace:
+  id: 10efdfef-5a5e-4ca0-823f-a7a022b82d45
+
+localResources:
+  specs:
+    - ..\contracts\ai-vision.openapi.yaml
+    - ..\contracts\iot-ingestion.openapi.yaml
+
+# Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
+
+cloudResources:
+  collections:
+    ..\postman\collections\FIT4110 Lab03 - IoT Ingestion Contract Tests: fit4110-lab03-iot-ingestion
